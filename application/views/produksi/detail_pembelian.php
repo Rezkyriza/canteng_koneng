@@ -1,37 +1,49 @@
 <div class="container-fluid">
-    <h4>Detail Pesanan <div class="btn btn-sm btn-success">No. Invoice: <?php echo $invoice->id ?></div></h4>
+    <h3><i class="fas fa-edit"></i>Detail Pembelian</h3>
 
-    <table class="table table-bordered table-hover table-striped">
-        <tr>
-            <th>Id Barang</th>
-            <th>Nama Produk</th>
-            <th>Jumlah Pesanan</th>
-            <th>Harga Satuan</th>
-            <th>Sub-Total</th>
-        </tr>
+    <?php foreach($pembelian as $pmb) :?>
+        <form method="post" action="<?php echo base_url().'dashboard_prd/detail' ?>">
+            <div>
+                <label>ID Invoice</label>
+                <input type="text" name="id" class="form-control" value="<?php echo $pmb->id ?>">
+            </div>
 
-        <?php 
-        $total = 0;
-        foreach($pembelian as $pmb):
-            $subtotal = $pmb->jumlah*$pmb->harga;
-            $total += $subtotal;
-        ?>
+            <div>
+                <label>Nama</label>
+                <input type="text" name="nama" class="form-control" value="<?php echo $pmb->nama ?>">
+            </div>
 
-        <tr>
-            <td><?php echo $pmb->id_produk?></td>
-            <td><?php echo $pmb->nama_prdk?></td>
-            <td><?php echo $pmb->jumlah?></td>
-            <td align="right"><?php echo number_format($pmb->harga,0,',','.')?></td>
-            <td align="right"><?php echo number_format($subtotal,0,',','.')?></td>
-        </tr>
+            <div>
+                <label>Alamat</label>
+                <input type="text" name="alamat" class="form-control" value="<?php echo $pmb->alamat ?>">
+            </div>
 
-        <?php endforeach; ?>
+            <div>
+                <label>ID Produk</label>
+                <input type="text" name="id_produk" class="form-control" value="<?php echo $pmb->id_produk ?>">
+            </div>
 
-        <tr>
-            <td colspan="4" align="right">Grand Total</td>
-            <td align="right">Rp. <?php echo number_format($total,0,',','.') ?></td>
-        </tr>
-    </table>
+            <div>
+                <label>Nama Produk</label>
+                <input type="text" name="nama_prdk" class="form-control" value="<?php echo $pmb->nama_prdk ?>">
+            </div>
 
-    <a href="<?php echo base_url('dashboard_prd/pembelian') ?>"><div class="btn btn-sm btn-primary">Kembali</div></a>
+            <div>
+                <label>Jumlah</label>
+                <input type="text" name="jumlah" class="form-control" value="<?php echo $pmb->jumlah ?>">
+            </div>
+
+            <div>
+                <label>Total Harga</label>
+                <input type="text" name="harga" class="form-control" value="<?php echo $pmb->harga ?>">
+            </div>
+
+            <div>
+                <label>Bukti Pembayaran</label>
+                <img src="<?php echo base_url().'/uploads/'.$pmb->gambar?>" class="" height="200" width="150" style="display: block; margin: auto;">
+            </div>
+
+            <?php echo anchor('dashboard_prd/pembelian','<div class="btn btn-sm btn-danger mt-3">Kembali</div>') ?>
+        </form>
+    <?php endforeach; ?>
 </div>
