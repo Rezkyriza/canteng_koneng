@@ -23,13 +23,13 @@
       <li class="nav-item active">
         <a class="nav-link" href="<?php echo base_url('dashboard_prd')?>">
           <i class="fas fa-fw fa-database"></i>
-          <span>Data Produk</span></a>
+          <span>DATA PRODUK</span></a>
       </li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-list"></i>
-          <span>Invoices</span>
+          <span>INVOICES</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
@@ -42,7 +42,7 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-list"></i>
-          <span>Penjadwalan</span>
+          <span>PENJADWALAN</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
