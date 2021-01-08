@@ -32,9 +32,16 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="<?php echo base_url('dashboard_pmb/tampil_data_psn')?>">
-          <i class="fas fa-fw fa-edit"></i>
-          <span>DATA PESANAN</span></a>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-list"></i>
+          <span>RIWAYAT</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="<?php echo base_url('dashboard_pmb/tampil_data_psn'); ?>">Data Pesanan</a>
+            <a class="collapse-item" href="<?php echo base_url('dashboard_pmb/tampil_status'); ?>">Data Pembelian</a>
+          </div>
+        </div>
       </li>
 
       <!-- Divider -->
@@ -100,8 +107,9 @@
             <div class="navbar">
               <ul class="nav navbar-nav navbar-right">
                 <li>
+                <i class="fas fa-cart-plus">: </i>
                   <?php
-                  $keranjang = 'Keranjang Belanja: '.$this->cart->total_items(). ' items'
+                  $keranjang = $this->cart->total_items(). ' items'
                   ?>
 
                   <?php echo anchor('dashboard_pmb/detail_keranjang', $keranjang) ?>
