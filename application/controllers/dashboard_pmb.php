@@ -61,20 +61,20 @@ class Dashboard_pmb extends CI_Controller{
         $this->load->view('footer');
     }
 
-    public function tambah_keranjang($id_produk){
-        $produk = $this->model_produk->find($id_produk);
-
-
+    public function tambah_keranjang(){
+        //$produk = $this->model_produk->find($id_produk);
+        $redirect_page = $this->input->post('redirect_page');
         $data = array(
-            'id'      => $produk->id_produk,
-            'qty'     => 1 ,
-            'price'   => $produk->harga,
-            'name'    => $produk->nama_prdk
+            'id'      => $this->input->post('id'),
+            'qty'     => $this->input->post('qty'),
+            'price'   => $this->input->post('price'),
+            'name'    => $this->input->post('name')
     );
     
     $this->cart->insert($data);
-    redirect('dashboard_pmb/index');
+    redirect($redirect_page, 'refresh');
     }
+    
 
     public function detail_keranjang(){
         $this->load->view('header');
@@ -83,15 +83,36 @@ class Dashboard_pmb extends CI_Controller{
         $this->load->view('footer');
     }
 
-    public function hapus_keranjang(){
+    public function hapus_keranjang($rowid){
+        $this->cart->remove($rowid);
+        redirect('dashboard_pmb/detail_keranjang');
+    }
+
+    public function hapus_Allkeranjang(){
         $this->cart->destroy();
         redirect('pembeli/pembeli/index');
     }
 
+    public function update_keranjang(){
+        $no=1;
+        foreach($this->cart->contents() as $items){
+            $data = array(
+                'rowid'   => $items['rowid'],
+                'qty'     => $this->input->post($no.'[qty]'),
+        );
+        $this->cart->update($data);
+        $no++;
+        }
+        redirect('dashboard_pmb/detail_keranjang');
+    }
+
     public function pembayaran(){
+        $username = $this->session->userdata('username');
+        $data['bayar'] = $this->model_profil->getProfilUser($username);
+        $data['tb_user'] = $this->model_profil->getData()->result();
         $this->load->view('header');
         $this->load->view('sidebar/sidebar_pmb');
-        $this->load->view('pembeli/pembayaran');
+        $this->load->view('pembeli/pembayaran', $data);
         $this->load->view('footer');
     }
 
@@ -109,22 +130,41 @@ class Dashboard_pmb extends CI_Controller{
     }
 
     public function tampil_form_psn(){
+        $data['motif1'] = $this->model_produk->tampil_motif1()->result();
+        $data['motif2'] = $this->model_produk->tampil_motif2()->result();
+        $data['motif3'] = $this->model_produk->tampil_motif3()->result();
+        $data['motif4'] = $this->model_produk->tampil_motif4()->result();
+        $data['warna1'] = $this->model_produk->tampil_warna1()->result();
+        $data['warna2'] = $this->model_produk->tampil_warna2()->result();
+        $data['warna3'] = $this->model_produk->tampil_warna3()->result();
+        $username = $this->session->userdata('username');
+        $data['pesan'] = $this->model_profil->getProfilUser($username);
+        $data['tb_user'] = $this->model_profil->getData()->result();
         $this->load->view('header');
         $this->load->view('sidebar/sidebar_pmb');
-        $this->load->view('pembeli/tambah_pesanan');
+        $this->load->view('pembeli/tambah_pesanan', $data);
         $this->load->view('footer');
         
     }
 
     public function simpan_pesanan(){
-        
+        $nama       = $this->input->post('nama');
+        $alamat     = $this->input->post('alamat');
+        $no_tlp     = $this->input->post('no_tlp');
         $jumlah     =$this->input->post('jumlah');
+        $motif      =$this->input->post('motif');
+        $warna      =$this->input->post('warna');
         $rincian    =$this->input->post('rincian');
         
 
         $data = array(
             'id_pesanan'   => '',
+            'nama'         => $nama,
+            'alamat'       => $alamat,
+            'no_tlp'       => $no_tlp,
             'jumlah'       => $jumlah,
+            'motif'        => $motif,
+            'warna'        => $warna,
             'rincian'      => $rincian
         );
         $this->model_produk->simpan_data($data,'tb_pesanan');
@@ -132,6 +172,8 @@ class Dashboard_pmb extends CI_Controller{
     }
     
     public function tampil_data_psn(){
+        $username = $this->session->userdata('username');
+        $data['profil'] = $this->model_profil->getProfilUser($username);
         $data['data'] = $this->model_produk->tampil_pesanan()->result();
         $this->load->view('header');
         $this->load->view('sidebar/sidebar_pmb');
@@ -139,4 +181,11 @@ class Dashboard_pmb extends CI_Controller{
         $this->load->view('footer');
     }
     
+    public function tampil_status(){
+        $data['data'] = $this->model_produk->tampil_pembelian($this->session->userdata('nama'))->result();
+        $this->load->view('header');
+        $this->load->view('sidebar/sidebar_pmb');
+        $this->load->view('pembeli/status_pembelian', $data);
+        $this->load->view('footer');
+    }
 }
