@@ -18,6 +18,8 @@ class Auth extends CI_Controller{
             redirect('dashboard_prd');
         } elseif ($_SESSION['role_id'] == '2'){
             redirect('dashboard_pmb');
+        } elseif ($_SESSION['role_id'] == '3'){
+            redirect('dashboard_pgd');
         }
     }
     public function login()
@@ -37,7 +39,23 @@ class Auth extends CI_Controller{
                     redirect('dashboard_prd');
                 }
                 else if ($user['role_id'] == '2') {
+                    $this->db->select('*');
+                    $this->db->from('temp_cart');
+                    $this->db->where('username', $this->session->userdata('username'));
+                    $res=$this->db->get();
+                    foreach($res->result_array() as $row){
+                        $row=json_decode($row, TRUE);
+                        $this->cart->insert($row);
+                    }
+
+                    $this->db->from('temp_cart');
+                    $this->db->where('username', $this->session->userdata('username'));
+                    $this->db->delete();
+
                     redirect('dashboard_pmb');
+                }
+                else if ($user['role_id'] == '3') {
+                    redirect('dashboard_pgd');
                 }
             } else {
                 $this->session->set_flashdata('error', 'Password anda tidak sesuai');
@@ -47,6 +65,12 @@ class Auth extends CI_Controller{
     }
     public function logout()
     {
+        foreach($this->cart->contents() as $items){
+            $this->db->from('temp_cart');
+            $this->db->set('username', $this->session->userdata('username'));
+            $this->db->set ('cart_row', json_encode($items));
+            $this->db->insert();
+        }
         $this->session->sess_destroy();
         redirect('auth');
     }
