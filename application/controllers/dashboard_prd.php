@@ -1,10 +1,12 @@
 <?php
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Dashboard_prd extends CI_Controller{
     public function __construct(){
         parent::__construct();
         $this->load->model('model_produk');
         $this->load->model('model_invoice');
+        $this->load->model('model_jadwal');
         $this->load->helper('url');
     }
 
@@ -92,12 +94,59 @@ class Dashboard_prd extends CI_Controller{
         $this->load->view('footer');
     }
 
-    public function detail($id_invoice){
-        $data['invoice'] = $this->model_invoice->ambil_id_invoice($id_invoice);
-        $data['pembelian'] = $this->model_invoice->ambil_id_pembelian($id_invoice);
+    public function detail($id){
+        $where = array('id' => $id);
+        $data['pembelian'] = $this->model_invoice->ambil_id_pembelian($where, 'tb_pembelian')->result();
         $this->load->view('header');
         $this->load->view('sidebar/sidebar_prd');
         $this->load->view('produksi/detail_pembelian', $data);
+        $this->load->view('footer');
+    }
+
+    public function pemesanan(){
+        $data['inv_psn'] = $this->model_invoice->tampil_data_pesanan();
+        $this->load->view('header');
+        $this->load->view('sidebar/sidebar_prd');
+        $this->load->view('produksi/pemesanan_prd', $data);
+        $this->load->view('footer');
+    }
+
+    public function ajukan_harga($id_pesanan){
+        $where = array('id_pesanan' => $id_pesanan);
+        $data['ajukan'] = $this->model_invoice->ambil_data_ajukan($where, 'tb_pesanan')->result();
+        $this->load->view('header');
+        $this->load->view('sidebar/sidebar_prd');
+        $this->load->view('produksi/ajukan_harga', $data);
+        $this->load->view('footer');
+    }
+
+    public function proses_ajukan(){
+        $id_pesanan     =$this->input->post('id_pesanan');
+        $jumlah         =$this->input->post('jumlah');
+        $rincian        =$this->input->post('rincian');
+        $total          =$this->input->post('total');
+
+        $data = array(
+            'id_pesanan'    => $id_pesanan,
+            'jumlah'        => $jumlah,
+            'rincian'       => $rincian,
+            'total'          => $total
+        );
+
+        $where = array(
+            'id_pesanan' => $id_pesanan
+        );
+
+        $this->model_invoice->update_data_pesanan($where,$data,'tb_pesanan');
+        redirect('dashboard_prd/index');
+    }
+
+    public function penjadwalan_psn($id_pesanan){
+        $where = array('id_pesanan' => $id_pesanan);
+        $data['jadwalpsn'] = $this->model_jadwal->ambil_jadwalpsn($where, 'tb_pesanan')->result();
+        $this->load->view('header');
+        $this->load->view('sidebar/sidebar_prd');
+        $this->load->view('produksi/jadwal_pesanan', $data);
         $this->load->view('footer');
     }
 
