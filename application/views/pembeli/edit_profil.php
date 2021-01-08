@@ -31,7 +31,6 @@
                 <input type="text" name="no_tlp" class="form-control" value="<?php echo $prf->no_tlp ?>">
             </div>
 
-            <button type="submit" class="btn btn-primary btn-sm mt-3">Simpan</button>
-        </form>
+            <button type="submit" class="btn btn-primary">Simpan</button>
     <?php endforeach; ?>
 </div>
