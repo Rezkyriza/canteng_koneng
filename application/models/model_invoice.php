@@ -6,6 +6,20 @@ class Model_invoice extends CI_Model{
         $tgl_pesan = date('Y-m-d');
         $nama = $this->input->post('nama');
         $alamat = $this->input->post('alamat');
+        $gambar = $_FILES['gambar']['name'];
+        if ($gambar = '') {} else{
+            $config['upload_path'] = './uploads';
+            $config['allowed_types'] = 'jpg|jpeg|png|gif';
+
+            $this->load->library('upload', $config);
+            if(!$this->upload->do_upload('gambar')){
+                echo "Gambar Gagal Diupload";
+            }
+            else{
+                $gambar=$this->upload->data('file_name');
+            }
+        }
+        $status = $this->input->post('status');
 
         /*$invoice = array(
             'nama'          => $nama,
@@ -25,7 +39,9 @@ class Model_invoice extends CI_Model{
                 'jumlah'            => $item['qty'],
                 'harga'             => $item['price'],
                 'tgl_pesan'         => date('Y-m-d H:i:s'),
-                'batas_bayar'       => date('Y-m-d', strtotime('+7 days', strtotime($tgl_pesan)))
+                'batas_bayar'       => date('Y-m-d', strtotime('+7 days', strtotime($tgl_pesan))),
+                'gambar'            => $gambar,
+                'status'            => "Penjual mengecek bukti pembayaran"
             );
             $this->db->insert('tb_pembelian', $data);
         }
@@ -42,21 +58,33 @@ class Model_invoice extends CI_Model{
         }
     }
 
-    public function ambil_id_invoice($id_invoice){
-        $result = $this->db->where('id', $id_invoice)->limit(1)->get('tb_pembelian');
-        if($result->num_rows() > 0){
-            return $result->row();
-        } else{
-            return false;
-        }
+    public function ambil_id_pembelian($where,$table){
+        return $this->db->get_where($table,$where);
     }
 
-    public function ambil_id_pembelian($id_invoice){
-        $result = $this->db->where('id_invoice', $id_invoice)->get('tb_pembelian');
+    /*public function ambil_id_pembelian($id_invoice){
+        $result = $this->db->where('id', $id_invoice)->get('tb_pembelian');
         if($result->num_rows() > 0){
             return $result->result();
         } else{
             return false;
         }
+    }*/
+
+    public function tampil_data_pesanan(){
+        $result = $this->db->get('tb_pesanan');
+        if($result->num_rows() > 0){
+            return $result->result();
+        }else{
+            return false;
+        }
+    }
+
+    public function ambil_data_ajukan($where,$table){
+        return $this->db->get_where($table,$where);
+    }
+    public function update_data_pesanan($where,$data,$table){
+        $this->db->where($where);
+        $this->db->update($table,$data);
     }
 }
