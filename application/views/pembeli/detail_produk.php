@@ -30,9 +30,19 @@
                         </tr>
 
                     </table>
-
-                    <?php echo anchor('dashboard_pmb/tambah_keranjang/'.$prd->id_produk,'<div class="btn btn-sm btn-primary">Tambah ke Keranjang</div>') ?>
-                    <?php echo anchor('dashboard_pmb/','<div class="btn btn-sm btn-danger">Kembali</div>') ?>
+                    <?php
+                        echo form_open('dashboard_pmb/tambah_keranjang');
+                        echo form_hidden('id', $prd->id_produk);
+                        echo form_hidden('price', $prd->harga);
+                        echo form_hidden('name', $prd->nama_prdk);
+                        echo form_hidden('redirect_page', str_replace('index.php/','',current_url()));
+        ?>
+                    <div class="row">
+                        <div class="col-sm-2"><input type="number" name="qty" max="10000" step="1" min="1" value="1" class="form-control"></div>
+                        <div class="col-sm-2"><button type="submit" class="btn btn-sm btn-primary"><i class="fas fa-cart-plus"> Add </i></button></div>
+                        
+                    </div>
+                    <?php echo form_close(); ?>
                 </div>
             </div>
             <?php endforeach; ?>
