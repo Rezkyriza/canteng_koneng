@@ -14,46 +14,36 @@
                 
                 ?>
             </div><br><br>
+            <?php foreach($bayar as $byr) :?>
             <h3>Input Alamat Pengiriman dan Pembayaran</h3>
 
-            <form method = "post" action="<?php echo base_url('dashboard_pmb/proses_pembelian') ?> ">
+            <form action="<?php echo base_url(). 'dashboard_pmb/proses_pembelian';?>" method="post" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>Nama Lengkap</label>
-                    <input type="text" name="nama" placeholder="Nama Lengkap Anda" class="form-control">
+                    <input type="text" readonly name="nama" class="form-control" value="<?php echo $byr->nama?>">
                 </div>
 
                 <div class="form-group">
                     <label>Alamat Lengkap</label>
-                    <input type="text" name="alamat" placeholder="Alamat Lengkap Anda" class="form-control">
+                    <input type="text" readonly name="alamat" class="form-control" value="<?php echo $byr->alamat?>">
                 </div>
 
                 <div class="form-group">
                     <label>Nomor Telephone</label>
-                    <input type="text" name="no_tlp" placeholder="Nomor Telephone Anda" class="form-control">
+                    <input type="text" readonly name="no_tlp" class="form-control" value="<?php echo $byr->no_tlp?>">
                 </div>
 
-                <div class="form-group">
-                    <label>Jasa Pengiriman</label>
-                    <select class="form-control">
-                        <option>JNE</option>
-                        <option>JNT</option>
-                        <option>Pos Indonesia</option>
-                        <option>SiCepat</option>
-                    </select>
+                <div>
+                    <label>Upload Bukti Pembayaran</label>
+                    <input type="file" name="gambar" class="form-control">
                 </div>
 
-                <div class="form-group">
-                    <label>Pilih BANK</label>
-                    <select class="form-control">
-                        <option>BCA - xxxxxxxx</option>
-                        <option>BRI - xxxxxxxx</option>
-                        <option>BNI - xxxxxxxx</option>
-                        <option>Mandiri- xxxxxxxx</option>
-                    </select>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Bayar</button>
                 </div>
-
-                <button type="submit" class="btn btn-sm btn-primary mb-3">Kirim</button>
             </form>
+            <?php endforeach; ?>
 
             <?php
             } else{
