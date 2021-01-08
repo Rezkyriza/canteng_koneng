@@ -6,6 +6,34 @@ class Model_produk extends CI_Model{
         return $this->db->get('tb_produk');
     }
 
+    public function tampil_motif1(){
+        return $this->db->where('motif', 'fauna')->get('tb_produk');
+    }
+
+    public function tampil_motif2(){
+        return $this->db->where('motif', 'flora')->get('tb_produk');
+    }
+
+    public function tampil_motif3(){
+        return $this->db->where('motif', 'alam')->get('tb_produk');
+    }
+
+    public function tampil_motif4(){
+        return $this->db->where('motif', 'abstrak')->get('tb_produk');
+    }
+
+    public function tampil_warna1(){
+        return $this->db->where('warna', 'gelap')->get('tb_produk');
+    }
+
+    public function tampil_warna2(){
+        return $this->db->where('warna', 'terang')->get('tb_produk');
+    }
+
+    public function tampil_warna3(){
+        return $this->db->where('warna', 'banyak warna')->get('tb_produk');
+    }
+
     public function tambah_produk($data,$table){
         $this->db->insert($table,$data);
     }
@@ -50,5 +78,9 @@ class Model_produk extends CI_Model{
 
     public function tampil_pesanan(){
         return $this->db->get('tb_pesanan');
+    }
+
+    public function tampil_pembelian(){
+        return $this->db->get('tb_pembelian');
     }
 }
